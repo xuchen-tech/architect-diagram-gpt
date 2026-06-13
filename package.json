@@ -1,0 +1,218 @@
+{
+  "name": "architect-diagram-gpt",
+  "displayName": "Architect Diagram GPT",
+  "description": "Generate beautiful architecture and flowchart images from Mermaid or text using gpt-image-2-all",
+  "version": "0.1.0",
+  "publisher": "architect-diagram-gpt",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other",
+    "Visualization"
+  ],
+  "keywords": [
+    "architecture",
+    "diagram",
+    "mermaid",
+    "flowchart",
+    "gpt-image",
+    "ai"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "architectDiagram.openPanel",
+        "title": "Open Diagram Generator",
+        "category": "Architect Diagram",
+        "icon": "$(graph)"
+      },
+      {
+        "command": "architectDiagram.generateAndInsert",
+        "title": "Generate Diagram and Insert Image",
+        "category": "Architect Diagram"
+      },
+      {
+        "command": "architectDiagram.generateFromSelection",
+        "title": "Generate Diagram from Selection",
+        "category": "Architect Diagram"
+      },
+      {
+        "command": "architectDiagram.generateFromDocument",
+        "title": "Generate Diagram from Document",
+        "category": "Architect Diagram"
+      },
+      {
+        "command": "architectDiagram.openSettings",
+        "title": "Open Settings",
+        "category": "Architect Diagram"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "architectDiagram.generateAndInsert",
+          "when": "editorHasSelection && editorLangId == markdown",
+          "group": "architectDiagram@1"
+        },
+        {
+          "command": "architectDiagram.generateFromSelection",
+          "when": "editorHasSelection && editorLangId != markdown",
+          "group": "architectDiagram@1"
+        },
+        {
+          "command": "architectDiagram.generateFromDocument",
+          "when": "editorTextFocus",
+          "group": "architectDiagram@2"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "architectDiagram.openPanel"
+        },
+        {
+          "command": "architectDiagram.generateAndInsert",
+          "when": "editorHasSelection && editorLangId == markdown"
+        },
+        {
+          "command": "architectDiagram.generateFromSelection",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "architectDiagram.generateFromDocument",
+          "when": "editorTextFocus"
+        },
+        {
+          "command": "architectDiagram.openSettings"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Architect Diagram GPT",
+      "properties": {
+        "architectDiagram.apiBaseUrl": {
+          "type": "string",
+          "default": "",
+          "description": "API base URL for image generation (without trailing slash)."
+        },
+        "architectDiagram.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Bearer API key for authentication.",
+          "order": 1
+        },
+        "architectDiagram.model": {
+          "type": "string",
+          "default": "gpt-image-2-all",
+          "description": "Image generation model name.",
+          "order": 2
+        },
+        "architectDiagram.size": {
+          "type": "string",
+          "default": "1536x1024",
+          "enum": [
+            "1024x1024",
+            "1536x1024",
+            "1024x1536"
+          ],
+          "enumDescriptions": [
+            "Square (1024×1024)",
+            "Landscape (1536×1024) — recommended for architecture diagrams",
+            "Portrait (1024×1536)"
+          ],
+          "description": "Output image size.",
+          "order": 3
+        },
+        "architectDiagram.diagramType": {
+          "type": "string",
+          "default": "architecture",
+          "enum": [
+            "architecture",
+            "flowchart",
+            "sequence",
+            "deployment",
+            "data-flow",
+            "auto"
+          ],
+          "enumDescriptions": [
+            "System architecture diagram",
+            "Business or technical flowchart",
+            "Sequence / interaction diagram",
+            "Deployment / infrastructure diagram",
+            "Data flow diagram",
+            "Infer type from input content"
+          ],
+          "description": "Default diagram style when generating images.",
+          "order": 4
+        },
+        "architectDiagram.stylePreset": {
+          "type": "string",
+          "default": "modern-flat",
+          "enum": [
+            "modern-flat",
+            "corporate-blue",
+            "dark-tech",
+            "minimal",
+            "hand-drawn"
+          ],
+          "enumDescriptions": [
+            "Clean modern flat design with soft shadows",
+            "Corporate blue palette, professional slides style",
+            "Dark background, neon accent tech style",
+            "Minimal black & white with clear hierarchy",
+            "Whiteboard / hand-drawn sketch style"
+          ],
+          "description": "Visual style preset for generated diagrams.",
+          "order": 5
+        },
+        "architectDiagram.language": {
+          "type": "string",
+          "default": "zh-CN",
+          "enum": [
+            "zh-CN",
+            "en",
+            "auto"
+          ],
+          "description": "Label language in the diagram (auto follows input).",
+          "order": 6
+        },
+        "architectDiagram.extraPrompt": {
+          "type": "string",
+          "default": "",
+          "description": "Additional instructions appended to every generation prompt."
+        },
+        "architectDiagram.imageOutputDir": {
+          "type": "string",
+          "default": "doc/images",
+          "description": "Directory to save generated images, relative to workspace root (e.g. doc/images). Created automatically if missing.",
+          "order": 7
+        },
+        "architectDiagram.imageFileNamePrefix": {
+          "type": "string",
+          "default": "diagram",
+          "description": "Filename prefix for saved images. Final name: {prefix}-{timestamp}.{ext}",
+          "order": 8
+        },
+        "architectDiagram.imageAltText": {
+          "type": "string",
+          "default": "架构图",
+          "description": "Alt text used in the Markdown image snippet inserted into the document.",
+          "order": 9
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.3.3"
+  }
+}
