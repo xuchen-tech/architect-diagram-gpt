@@ -4,6 +4,15 @@
   "description": "Generate beautiful architecture and flowchart images from Mermaid or text using gpt-image-2-all",
   "version": "0.1.0",
   "publisher": "architect-diagram-gpt",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xuchen-tech/architect-diagram-gpt.git"
+  },
+  "homepage": "https://github.com/xuchen-tech/architect-diagram-gpt#readme",
+  "bugs": {
+    "url": "https://github.com/xuchen-tech/architect-diagram-gpt/issues"
+  },
   "engines": {
     "vscode": "^1.85.0"
   },
